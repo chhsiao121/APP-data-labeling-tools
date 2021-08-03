@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Object Detection Codelab</string>
     <string name="tv_take_photo">Take photo</string>
+    <string name="tv_go_label">to label</string>
     <string name="tv_description">Select a preset image or take a new photo</string>
     <string name="tv_placeholder">Object detection demo</string>
+    <string name="label_1">label 1</string>
+    <string name="label_2">label 2</string>
+    <string name="label_3">label 3</string>
 </resources>

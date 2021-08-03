@@ -19,7 +19,10 @@ package com.google.mlkit.codelab.objectdetection
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -27,21 +30,14 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.objects.DetectedObject
-import com.google.mlkit.vision.objects.ObjectDetection
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.max
-import kotlin.math.min
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
@@ -51,28 +47,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private lateinit var captureImageFab: Button
-    private lateinit var inputImageView: ImageView
-    private lateinit var imgSampleOne: ImageView
-    private lateinit var imgSampleTwo: ImageView
-    private lateinit var imgSampleThree: ImageView
-    private lateinit var tvPlaceholder: TextView
+    private lateinit var toLabelFab: Button
     private lateinit var currentPhotoPath: String
+    private lateinit var imageName: String
+
+    private var ot: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         captureImageFab = findViewById(R.id.captureImageFab)
-        inputImageView = findViewById(R.id.imageView)
-        imgSampleOne = findViewById(R.id.imgSampleOne)
-        imgSampleTwo = findViewById(R.id.imgSampleTwo)
-        imgSampleThree = findViewById(R.id.imgSampleThree)
-        tvPlaceholder = findViewById(R.id.tvPlaceholder)
+        toLabelFab = findViewById(R.id.toLabelFab)
 
         captureImageFab.setOnClickListener(this)
-        imgSampleOne.setOnClickListener(this)
-        imgSampleTwo.setOnClickListener(this)
-        imgSampleThree.setOnClickListener(this)
+        toLabelFab.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,53 +82,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     Log.e(TAG, e.message.toString())
                 }
             }
-            R.id.imgSampleOne -> {
-                setViewAndDetect(getSampleImage(R.drawable.demo_img1))
+            R.id.toLabelFab -> {
+
+                val intent = Intent(this, LabelActivity::class.java)
+//                val stream = ByteArrayOutputStream()
+//                imageResult.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+//                val byteArray: ByteArray = stream.toByteArray()
+                intent.putExtra("image", currentPhotoPath)
+                intent.putExtra("imageName", imageName)
+                intent.putExtra("ot", ot)
+                startActivity(intent)
             }
-            R.id.imgSampleTwo -> {
-                setViewAndDetect(getSampleImage(R.drawable.demo_img2))
-            }
-            R.id.imgSampleThree -> {
-                setViewAndDetect(getSampleImage(R.drawable.demo_img3))
-            }
-        }
-    }
-
-    /**
-     * ML Kit Object Detection function. We'll add ML Kit code here in the codelab.
-     */
-    private fun runObjectDetection(bitmap: Bitmap) {
-        val image = InputImage.fromBitmap(bitmap, 0)
-
-        val options = ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
-            .enableMultipleObjects()
-            .enableClassification()
-            .build()
-        val objectDetector = ObjectDetection.getClient(options)
-
-        objectDetector.process(image).addOnSuccessListener { results ->
-            debugPrint(results)
-
-            // Parse ML Kit's DetectedObject and create corresponding visualization data
-            val detectedObjects = results.map {
-                var text = "Unknown"
-
-                // We will show the top confident detection result if it exist
-                if (it.labels.isNotEmpty()) {
-                    val firstLabel = it.labels.first()
-                    text = "${firstLabel.text}, ${firstLabel.confidence.times(100).toInt()}%"
-                }
-                BoxWithText(it.boundingBox, text)
-            }
-
-            // Draw the detection result on the input bitmap
-            val visualizedResult = drawDetectionResult(bitmap, detectedObjects)
-
-            // Show the detection result on the app screen
-            inputImageView.setImageBitmap(visualizedResult)
-        }.addOnFailureListener {
-            Log.e(TAG, it.message.toString())
         }
     }
 
@@ -148,11 +101,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun setViewAndDetect(bitmap: Bitmap) {
         // Display the captured image
-        inputImageView.setImageBitmap(bitmap)
-        tvPlaceholder.visibility = View.INVISIBLE
+//        inputImageView.setImageBitmap(bitmap)
+//        tvPlaceholder.visibility = View.INVISIBLE
 
         // Run object detection and display the result
-        runObjectDetection(bitmap)
+//        runObjectDetection(bitmap)
     }
 
     /**
@@ -161,8 +114,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun getCapturedImage(): Bitmap {
         // Get the dimensions of the View
-        val targetW: Int = inputImageView.width
-        val targetH: Int = inputImageView.height
+//        val targetW: Int = inputImageView.width
+//        val targetH: Int = inputImageView.height
 
         val bmOptions = BitmapFactory.Options().apply {
             // Get the dimensions of the bitmap
@@ -174,11 +127,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val photoH: Int = outHeight
 
             // Determine how much to scale down the image
-            val scaleFactor: Int = max(1, min(photoW / targetW, photoH / targetH))
+//            val scaleFactor: Int = max(1, min(photoW / targetW, photoH / targetH))
 
             // Decode the image file into a Bitmap sized to fill the View
             inJustDecodeBounds = false
-            inSampleSize = scaleFactor
+//            inSampleSize = scaleFactor
             inMutable = true
         }
         val exifInterface = ExifInterface(currentPhotoPath)
@@ -188,6 +141,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         )
 
         val bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
+        ot = orientation
         return when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_90 -> {
                 rotateImage(bitmap, 90f)
@@ -233,6 +187,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        imageName = "JPEG_${timeStamp}_"
         return File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
             ".jpg", /* suffix */
@@ -271,66 +226,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    /**
-     * Draw bounding boxes around objects together with the object's name.
-     */
-    private fun drawDetectionResult(
-            bitmap: Bitmap,
-            detectionResults: List<BoxWithText>
-    ): Bitmap {
-        val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(outputBitmap)
-        val pen = Paint()
-        pen.textAlign = Paint.Align.LEFT
 
-        detectionResults.forEach {
-            // draw bounding box
-            pen.color = Color.RED
-            pen.strokeWidth = 8F
-            pen.style = Paint.Style.STROKE
-            val box = it.box
-            canvas.drawRect(box, pen)
-
-            val tagSize = Rect(0, 0, 0, 0)
-
-            // calculate the right font size
-            pen.style = Paint.Style.FILL_AND_STROKE
-            pen.color = Color.YELLOW
-            pen.strokeWidth = 2F
-
-            pen.textSize = MAX_FONT_SIZE
-            pen.getTextBounds(it.text, 0, it.text.length, tagSize)
-            val fontSize: Float = pen.textSize * box.width() / tagSize.width()
-
-            // adjust the font size so texts are inside the bounding box
-            if (fontSize < pen.textSize) pen.textSize = fontSize
-
-            var margin = (box.width() - tagSize.width()) / 2.0F
-            if (margin < 0F) margin = 0F
-            canvas.drawText(
-                it.text, box.left + margin,
-                box.top + tagSize.height().times(1F), pen
-            )
-        }
-        return outputBitmap
-    }
-
-    /**
-     * Print out the object detection result to Logcat.
-     */
-    private fun debugPrint(detectedObjects: List<DetectedObject>) {
-        detectedObjects.forEachIndexed { index, detectedObject ->
-            val box = detectedObject.boundingBox
-
-            Log.d(TAG, "Detected object: $index")
-            Log.d(TAG, " trackingId: ${detectedObject.trackingId}")
-            Log.d(TAG, " boundingBox: (${box.left}, ${box.top}) - (${box.right},${box.bottom})")
-            detectedObject.labels.forEach {
-                Log.d(TAG, " categories: ${it.text}")
-                Log.d(TAG, " confidence: ${it.confidence}")
-            }
-        }
-    }
 }
 
 /**

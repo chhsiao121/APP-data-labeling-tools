@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,9 +23,11 @@
 
                 <!-- Media -->
                 <ImageView
+                    android:id="@+id/image1"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="194dp"
-                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/demo_img9" />
 
                 <LinearLayout
@@ -46,7 +47,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 1">
+                        android:hint="@string/label_1">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/label_1_1"
@@ -60,7 +61,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 2">
+                        android:hint="@string/label_2">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/label_1_2"
@@ -74,7 +75,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 3">
+                        android:hint="@string/label_3">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/label_1_3"
@@ -97,9 +98,11 @@
 
                 <!-- Media -->
                 <ImageView
+                    android:id="@+id/image2"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="194dp"
-                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/demo_img9" />
 
                 <LinearLayout
@@ -120,7 +123,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 1">
+                        android:hint="@string/label_1">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/label_2_1"
@@ -133,7 +136,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 2">
+                        android:hint="@string/label_2">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/label_2_2"
@@ -146,7 +149,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 3">
+                        android:hint="@string/label_3">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/label_2_3"
@@ -169,11 +172,12 @@
 
                 <!-- Media -->
                 <ImageView
+                    android:id="@+id/image3"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="194dp"
-                    app:srcCompat="@drawable/demo_img9"
-                    android:scaleType="centerCrop"
-                    />
+                    app:srcCompat="@drawable/demo_img9" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -190,7 +194,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 1"
+                        android:hint="@string/label_1"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -202,7 +206,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 2"
+                        android:hint="@string/label_2"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -214,7 +218,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="label 3"
+                        android:hint="@string/label_3"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -231,6 +235,16 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/check_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_check_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
