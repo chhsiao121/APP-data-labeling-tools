@@ -30,9 +30,14 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -48,9 +53,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var captureImageFab: Button
     private lateinit var toLabelFab: Button
+
     private lateinit var currentPhotoPath: String
     private lateinit var imageName: String
-
+    private lateinit var storage: FirebaseStorage
     private var ot: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,15 +65,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         captureImageFab = findViewById(R.id.captureImageFab)
         toLabelFab = findViewById(R.id.toLabelFab)
-
+        storage = Firebase.storage
         captureImageFab.setOnClickListener(this)
         toLabelFab.setOnClickListener(this)
+
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE &&
-            resultCode == Activity.RESULT_OK
+            resultCode == RESULT_OK
         ) {
             setViewAndDetect(getCapturedImage())
         }
@@ -83,16 +92,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.toLabelFab -> {
-
-                val intent = Intent(this, LabelActivity::class.java)
+                imgUploadFiles()
 //                val stream = ByteArrayOutputStream()
 //                imageResult.compress(Bitmap.CompressFormat.JPEG, 90, stream)
 //                val byteArray: ByteArray = stream.toByteArray()
-                intent.putExtra("image", currentPhotoPath)
-                intent.putExtra("imageName", imageName)
-                intent.putExtra("ot", ot)
-                startActivity(intent)
+//                val intent = Intent(this, LabelActivity::class.java)
+//
+//                intent.putExtra("image", currentPhotoPath)
+//                intent.putExtra("imageName", imageName )
+//                intent.putExtra("ot", ot)
+//                startActivity(intent)
             }
+
         }
     }
 
@@ -226,7 +237,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun imgUploadFiles(){
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+//        val zipFile: File = File(currentPhotoPath)
+        var file = Uri.fromFile(File(currentPhotoPath))
+//        val imagesRef = storageRef.child("images/${file.lastPathSegment}")
+        val imagesRef = storageRef.child(imageName+".jpg")
 
+        var uploadTask = imagesRef.putFile(file)
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Toast.makeText(getApplicationContext(), "保存失敗Q", Toast.LENGTH_LONG).show()
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            Toast.makeText(getApplicationContext(), imageName + ".jpg上傳成功", Toast.LENGTH_LONG).show();
+            val intent = Intent(this, LabelActivity::class.java)
+            intent.putExtra("image", currentPhotoPath)
+            intent.putExtra("imageName", imageName )
+            intent.putExtra("ot", ot)
+            startActivity(intent)
+            // ...
+        }
+    }
 }
 
 /**

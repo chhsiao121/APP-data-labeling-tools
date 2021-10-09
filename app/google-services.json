@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "953295231049",
+    "project_id": "mr-gao-test1",
+    "storage_bucket": "mr-gao-test1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953295231049:android:46cf2f3bbe62892cb3c798",
+        "android_client_info": {
+          "package_name": "com.google.mlkit.codelab.objectdetection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953295231049-1c473nq4am4pqbc3qa1hnk1082vhro6k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq9hta3sWQfN35sVpojXSwy1KQj9HDbdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953295231049-1c473nq4am4pqbc3qa1hnk1082vhro6k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
