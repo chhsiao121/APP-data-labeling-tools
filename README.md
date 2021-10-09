@@ -22,10 +22,8 @@
 - 圖片已JPEG格式儲存於firebase storeage，檔名格式為“JPEG_日期_時間”,如“JPEG_20201009_141200”
 - 使用者標記資料已JSON格式儲存於firebase realtime database，格式如下
 
-
+欄位解釋:
 ```
-#欄位解釋
-
     "標記物件隨機生成ID(英數混合)" : {
       "bottom" : "物件框底部y軸數值(int)",
       "label1" : "標籤1（string)",
@@ -36,9 +34,11 @@
       "top" : "物件框頂部y軸數值(int)",
       "uid" : "該物件對應照片檔名（string"
     }
+```
 
-#儲存範例
+儲存範例:
 
+```
     "-MlJ27Vsisfl9O9TcNfY" : {
       "bottom" : "2990",
       "label1" : "鍵盤",
