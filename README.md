@@ -32,7 +32,7 @@
       "left" : "物件框左邊x軸數值(int)",
       "right" : "物件框右邊x軸數值(int)",
       "top" : "物件框頂部y軸數值(int)",
-      "uid" : "該物件對應照片檔名（string"
+      "uid" : "該物件對應照片檔名（string)"
     }
 ```
 
@@ -52,7 +52,7 @@
 ```
 展示影片
 ------------
-[Youtube連結](https://youtu.be/kv-7mnxCc_s)
+[Youtube連結](https://youtu.be/3dlyRlCIImk)
 
 預計增加功能
 ------------
